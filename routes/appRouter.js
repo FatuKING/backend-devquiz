@@ -10,9 +10,9 @@ export function createRouter () {
   const appController = new AppController({ appModel })
 
   appRouter.get('/categories/:categoryId/questions', appController.questions)
-  // appRouter.get('/categories/:categoryId/ranking', appController.rankings)
-  appRouter.('/registerScore', appController.registerScore)
-  // appRouter.post('/sendMail', appController.sendMail)
+  appRouter.get('/categories/:categoryId/ranking', appController.rankings)
+  appRouter.post('/registerScore', appController.registerScore)
+  appRouter.post('/sendMail', appController.sendMail)
 
   return appRouter
 }

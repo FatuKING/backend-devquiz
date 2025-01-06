@@ -1,6 +1,9 @@
+import sendMail from '../services/mailService.js'
+
 export class AppController {
-  constructor ({ appModel }) {
+  constructor ({ appModel, mailService }) {
     this.appModel = appModel
+    this.mailService = mailService
   }
 
   questions = async (req, res) => {
@@ -25,15 +28,35 @@ export class AppController {
     }
   }
 
-  registerScore = async (req, res) => {
-    const { categoryId, score, name } = req.body
+  rankings = async (req, res) => {
+    const categoryId = req.params.categoryId
 
     try {
-      if (!categoryId || !score || !name) {
+      const ranking = await this.appModel.getRanking(categoryId)
+
+      res.status(200).json(ranking)
+    } catch (error) {
+      res.status(400).send(error.message)
+    }
+  }
+
+  registerScore = async (req, res) => {
+    const { categoryId, userName, score } = req.body
+
+    const mailOptions = {
+      from: 'cozzanifacundo@gmail.com',
+      to: 'cozzanifacundo@gmail.com',
+      subject: 'Nuevo puntaje en devquiz',
+      text: `El usuario ${userName} ha obtenido ${score} puntos en la categoría ${categoryId}`
+    }
+
+    try {
+      if (!categoryId || !score || !userName) {
         throw new Error('Invalid request')
       }
 
-      await this.appModel.registerScore(categoryId, score, name)
+      await this.appModel.addScore({ categoryId, userName, score })
+      await sendMail(mailOptions)
 
       res.status(200).json('Registered score')
     } catch (error) {
@@ -41,7 +64,24 @@ export class AppController {
     }
   }
 
-  home = async (req, res) => {
-    res.status(200).json('Welcome to the Quiz API')
+  sendMail = async (req, res) => {
+    const { name, email, message } = req.body
+
+    const mailOptions = {
+      from: 'cozzanifacundo@gmail.com',
+      to: 'cozzanifacundo@gmail.com',
+      subject: 'Mensaje de devquiz',
+      text: `
+          Nombre Completo: ${name}
+          mail: ${email}
+          Mensaje: ${message}`
+    }
+
+    try {
+      await sendMail(mailOptions)
+      res.status(200).json('Mail sent')
+    } catch (error) {
+      res.status(400).send(error.message)
+    }
   }
 }

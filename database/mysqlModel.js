@@ -66,9 +66,10 @@ export class MysqlConnection {
     }
   }
 
-  static async addScore ({ categoryId, score, name }) {
+  static async addScore ({ categoryId, userName, score }) {
     try {
-      const [rows] = await connection.query('CALL ManageQuiz(?, ?, ?, ?)', ['addScore', categoryId, name, score])
+      console.log(categoryId, userName, score)
+      const [rows] = await connection.query('CALL ManageQuiz(?, ?, ?, ?)', ['addScore', categoryId, userName, score])
       return rows[0]
     } catch (error) {
       throw new Error(`Error en la conexión a la base de datos: ${error.message}`)
