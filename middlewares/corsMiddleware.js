@@ -1,7 +1,7 @@
 import cors from 'cors'
 
 const ACCEPTED_ORIGINS = [
-  'https://www.devquiz.com',
+  'https://www.devquiz.site',
   'http://localhost:5173'
 ]
 

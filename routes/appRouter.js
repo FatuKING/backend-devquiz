@@ -11,6 +11,7 @@ export function createRouter () {
 
   appRouter.get('/categories/:categoryId/questions', appController.questions)
   appRouter.get('/categories/:categoryId/ranking', appController.rankings)
+  appRouter.get('/categories/:categoryId/top/ranking', appController.topRankings)
   appRouter.post('/registerScore', appController.registerScore)
   appRouter.post('/sendMail', appController.sendMail)
 

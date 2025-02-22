@@ -40,6 +40,18 @@ export class AppController {
     }
   }
 
+  topRankings = async (req, res) => {
+    const categoryId = req.params.categoryId
+
+    try {
+      const topRanking = await this.appModel.getTopRanking(categoryId)
+
+      res.status(200).json(topRanking)
+    } catch (error) {
+      res.status(400).send(error.message)
+    }
+  }
+
   registerScore = async (req, res) => {
     const { categoryId, userName, score } = req.body
 
